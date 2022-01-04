@@ -1,0 +1,20 @@
+{
+    "title" : "test",
+    "usedHourlyRateInEuro" : 123,
+    "trackedWorkItems" : [{
+        "description" : "test 1",
+        "epicDescription": "test 1",
+        "trackedHours" : 123
+        },
+        {
+            "description" : "test 2",
+            "epicDescription": "test 2",
+            "trackedHours" : 123
+        },
+        {
+            "description" : "test 3",
+            "epicDescription": "test 3",
+            "trackedHours" : 123
+        }
+    ]
+}
