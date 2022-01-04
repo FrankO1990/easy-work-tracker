@@ -16,15 +16,33 @@ class EasyWorkTrackerRepositoryImpl implements EasyWorkTrackerRepository {
       {required this.networkInfo, required this.remoteDataSource});
   @override
   Future<Either<Failure, AllTrackingPeriods>> addTrackingPeriod(
-      TrackingPeriod trackingPeriod) {
-    // TODO: implement addTrackingPeriod
-    throw UnimplementedError();
+      TrackingPeriod trackingPeriod) async {
+    if (!await networkInfo.isConnected) {
+      return Left(DeviceOfflineFailure());
+    }
+    try {
+      final result = await remoteDataSource.addTrackingPeriod(trackingPeriod);
+      return Right(result);
+    } on ServerException {
+      return Left(ServerFailure());
+    } catch (exception) {
+      return Left(UnexpectedFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, TrackingPeriod>> addWorkItem(WorkItem workItem) {
-    // TODO: implement addWorkItem
-    throw UnimplementedError();
+  Future<Either<Failure, TrackingPeriod>> addWorkItem(WorkItem workItem) async {
+    if (!await networkInfo.isConnected) {
+      return Left(DeviceOfflineFailure());
+    }
+    try {
+      final result = await remoteDataSource.addWorkItem(workItem);
+      return Right(result);
+    } on ServerException {
+      return left(ServerFailure());
+    } catch (exception) {
+      return Left(UnexpectedFailure());
+    }
   }
 
   @override
@@ -38,7 +56,7 @@ class EasyWorkTrackerRepositoryImpl implements EasyWorkTrackerRepository {
     } on ServerException {
       return Left(ServerFailure());
     } catch (exception) {
-      return Left(ServerFailure());
+      return Left(UnexpectedFailure());
     }
   }
 }
