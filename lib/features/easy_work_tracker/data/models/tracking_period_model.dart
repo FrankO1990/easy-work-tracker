@@ -25,6 +25,19 @@ class TrackingPeriodModel extends TrackingPeriod {
         trackedWorkItemModels: castTrackedWorkItems);
   }
 
+  factory TrackingPeriodModel.fromTrackingPeriod(TrackingPeriod entity) {
+    List<WorkItemModel> entityWorkItemsConverted =
+        List<WorkItemModel>.empty(growable: true);
+    for (int i = 0; i < entity.trackedWorkItems.length; i++) {
+      entityWorkItemsConverted
+          .add(WorkItemModel.fromWorkItem(entity.trackedWorkItems[i]));
+    }
+    return TrackingPeriodModel(
+        title: entity.title,
+        usedHourlyRateInEuro: entity.usedHourlyRateInEuro,
+        trackedWorkItemModels: entityWorkItemsConverted);
+  }
+
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> trackedWorkItemsDynamicMapList =
         trackedWorkItemModels.map((e) => e.toJson()).toList();

@@ -9,7 +9,7 @@ import 'package:franks_invoice_tool/features/easy_work_tracker/data/datasources/
     as _i6;
 import 'package:franks_invoice_tool/features/easy_work_tracker/data/models/all_tracking_periods_model.dart'
     as _i2;
-import 'package:franks_invoice_tool/features/easy_work_tracker/data/models/tracking_period_model.dart'
+import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/tracking_period.dart'
     as _i3;
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/work_item.dart'
     as _i7;
@@ -27,8 +27,7 @@ import 'package:mockito/mockito.dart' as _i1;
 class _FakeAllTrackingPeriodsModel_0 extends _i1.Fake
     implements _i2.AllTrackingPeriodsModel {}
 
-class _FakeTrackingPeriodModel_1 extends _i1.Fake
-    implements _i3.TrackingPeriodModel {}
+class _FakeTrackingPeriod_1 extends _i1.Fake implements _i3.TrackingPeriod {}
 
 /// A class which mocks [NetworkInfo].
 ///
@@ -55,18 +54,18 @@ class MockEasyWorkTrackerRemoteDataSource extends _i1.Mock
 
   @override
   _i5.Future<_i2.AllTrackingPeriodsModel> addTrackingPeriod(
-          dynamic trackingPeriodModel) =>
+          _i3.TrackingPeriod? trackingPeriodModel) =>
       (super.noSuchMethod(
               Invocation.method(#addTrackingPeriod, [trackingPeriodModel]),
               returnValue: Future<_i2.AllTrackingPeriodsModel>.value(
                   _FakeAllTrackingPeriodsModel_0()))
           as _i5.Future<_i2.AllTrackingPeriodsModel>);
   @override
-  _i5.Future<_i3.TrackingPeriodModel> addWorkItem(_i7.WorkItem? workItem) =>
+  _i5.Future<_i3.TrackingPeriod> addWorkItem(_i7.WorkItem? workItem) =>
       (super.noSuchMethod(Invocation.method(#addWorkItem, [workItem]),
-              returnValue: Future<_i3.TrackingPeriodModel>.value(
-                  _FakeTrackingPeriodModel_1()))
-          as _i5.Future<_i3.TrackingPeriodModel>);
+              returnValue:
+                  Future<_i3.TrackingPeriod>.value(_FakeTrackingPeriod_1()))
+          as _i5.Future<_i3.TrackingPeriod>);
   @override
   _i5.Future<_i2.AllTrackingPeriodsModel> getTrackingPeriods() =>
       (super.noSuchMethod(Invocation.method(#getTrackingPeriods, []),

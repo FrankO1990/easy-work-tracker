@@ -17,6 +17,13 @@ class WorkItemModel extends WorkItem {
         trackedHours: jsonMap['trackedHours']);
   }
 
+  factory WorkItemModel.fromWorkItem(WorkItem workItem) {
+    return WorkItemModel(
+        description: workItem.description,
+        epicDescription: workItem.epicDescription,
+        trackedHours: workItem.trackedHours);
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'description': description,

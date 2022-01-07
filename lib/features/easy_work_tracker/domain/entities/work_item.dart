@@ -12,5 +12,5 @@ class WorkItem extends Equatable {
   });
 
   @override
-  List<Object?> get props => [description, trackedHours];
+  List<Object?> get props => [description, epicDescription, trackedHours];
 }

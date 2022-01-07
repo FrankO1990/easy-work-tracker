@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:franks_invoice_tool/core/errors/exception.dart';
@@ -28,9 +26,6 @@ void main() {
   AllTrackingPeriodsModel tAllTrackingPeriodsModel =
       AllTrackingPeriodsModel.fromJson(
           jsonDecode(fixture('response_get_tracking_periods.json')));
-
-  AllTrackingPeriods tAllTrackingPeriods =
-      const AllTrackingPeriods(trackingPeriods: []);
 
   TrackingPeriod tTrackingPeriod = const TrackingPeriod(
       title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: []);
@@ -159,7 +154,7 @@ void main() {
     });
   });
 
-  group('[EasyWorkTrackerRepository - addWorkItem - Offline Path]', () {
+  group('[EasyWorkTrackerRepositoryImpl - addWorkItem - Offline Path]', () {
     test('should return a DeviceOfflineFailure when the device is offline',
         () async {
       // Arrange
@@ -176,7 +171,7 @@ void main() {
     });
   });
 
-  group('[EaszWorkTrackerRepositoryImpl - addTrackingPeriod-connection check]',
+  group('[EasyWorkTrackerRepositoryImpl - addTrackingPeriod-connection check]',
       () {
     stubNetworkInfoOnline();
     test('should check if the device is online', () async {

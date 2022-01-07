@@ -9,6 +9,8 @@ import '../../../../fixtures/fixture_reader.dart';
 void main() {
   WorkItemModel tWorkItemModel = const WorkItemModel(
       description: 'test', epicDescription: 'test', trackedHours: 123);
+  WorkItem tWorkItem = const WorkItem(
+      description: 'test', epicDescription: 'test', trackedHours: 123);
 
   group('[WorkItemModel]', () {
     test('should return a subclass of WorkItem', () async {
@@ -27,6 +29,17 @@ void main() {
           jsonDecode(fixture('response_work_item.json'));
       // Act
       final result = WorkItemModel.fromJson(jsonMap);
+      // Assert
+      expect(result, tWorkItemModel);
+    });
+  });
+
+  group('[WorkItemModel fromWorkItem]', () {
+    test('should return a valid WorkItemModel from a WorkItem', () async {
+      // Arrange
+
+      // Act
+      final result = WorkItemModel.fromWorkItem(tWorkItem);
       // Assert
       expect(result, tWorkItemModel);
     });
