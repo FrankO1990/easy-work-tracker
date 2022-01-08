@@ -1,9 +1,27 @@
 part of 'easy_work_tracker_bloc.dart';
 
 abstract class EasyWorkTrackerState extends Equatable {
-  const EasyWorkTrackerState();  
+  const EasyWorkTrackerState();
 
   @override
   List<Object> get props => [];
 }
-class EasyWorkTrackerInitial extends EasyWorkTrackerState {}
+
+class Empty extends EasyWorkTrackerState {}
+
+class Error extends EasyWorkTrackerState {
+  final String message;
+
+  const Error({required this.message});
+}
+
+class Loading extends EasyWorkTrackerState {}
+
+class TrackingPeriodsLoaded extends EasyWorkTrackerState {
+  final AllTrackingPeriods allTrackingPeriods;
+
+  const TrackingPeriodsLoaded({required this.allTrackingPeriods});
+
+  @override
+  List<Object> get props => [];
+}

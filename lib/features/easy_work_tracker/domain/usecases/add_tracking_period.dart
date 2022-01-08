@@ -6,20 +6,22 @@ import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/a
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/tracking_period.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/repositories/easy_work_tracker_repository.dart';
 
-class AddTrackingPeriod extends UseCase<AllTrackingPeriods, Params> {
+class AddTrackingPeriod
+    extends UseCase<AllTrackingPeriods, TrackingPeriodParams> {
   final EasyWorkTrackerRepository repository;
 
   AddTrackingPeriod(this.repository);
   @override
-  Future<Either<Failure, AllTrackingPeriods>> call(Params params) async {
+  Future<Either<Failure, AllTrackingPeriods>> call(
+      TrackingPeriodParams params) async {
     return await repository.addTrackingPeriod(params.trackingPeriod);
   }
 }
 
-class Params extends Equatable {
+class TrackingPeriodParams extends Equatable {
   final TrackingPeriod trackingPeriod;
 
-  const Params({required this.trackingPeriod});
+  const TrackingPeriodParams({required this.trackingPeriod});
   @override
   List<Object?> get props => [trackingPeriod];
 }

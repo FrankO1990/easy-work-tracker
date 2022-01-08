@@ -26,7 +26,7 @@ void main() {
       const trackingPeriod = TrackingPeriod(
           title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: []);
       // Act
-      await usecase(const Params(trackingPeriod: trackingPeriod));
+      await usecase(const TrackingPeriodParams(trackingPeriod: trackingPeriod));
       // Assert
       verify(mockEasyWorkTrackerRepository.addTrackingPeriod(trackingPeriod));
       verifyNoMoreInteractions(mockEasyWorkTrackerRepository);
