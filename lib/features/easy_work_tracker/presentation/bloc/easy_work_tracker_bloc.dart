@@ -48,6 +48,7 @@ class EasyWorkTrackerBloc extends Bloc<EasyWorkTrackerEvent, EasyWorkTrackerStat
         final result = await addTrackingPeriod(
           TrackingPeriodParams(
             trackingPeriod: TrackingPeriod(
+              id: 0,
               title: event.inputTitle,
               usedHourlyRateInEuro: parsedInteger,
               trackedWorkItems: const [],

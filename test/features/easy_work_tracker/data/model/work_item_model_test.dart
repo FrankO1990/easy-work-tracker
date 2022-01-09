@@ -8,9 +8,19 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   WorkItemModel tWorkItemModel = const WorkItemModel(
-      description: 'test', epicDescription: 'test', trackedHours: 123);
+    id: 1,
+    associatedTrackingPeriodId: 1,
+    description: 'test',
+    epicDescription: 'test',
+    trackedHours: 123,
+  );
   WorkItem tWorkItem = const WorkItem(
-      description: 'test', epicDescription: 'test', trackedHours: 123);
+    id: 1,
+    associatedTrackingPeriodId: 1,
+    description: 'test',
+    epicDescription: 'test',
+    trackedHours: 123,
+  );
 
   group('[WorkItemModel]', () {
     test('should return a subclass of WorkItem', () async {
@@ -22,11 +32,9 @@ void main() {
   });
 
   group('[WorkItemModel fromJson]', () {
-    test('should return a valid WorkItemModel from an input json map',
-        () async {
+    test('should return a valid WorkItemModel from an input json map', () async {
       // Arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture('response_work_item.json'));
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('response_work_item.json'));
       // Act
       final result = WorkItemModel.fromJson(jsonMap);
       // Assert
@@ -48,8 +56,7 @@ void main() {
   group('[WorkItemModel toJson]', () {
     test('should return a matching json map', () async {
       // Arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture('response_work_item.json'));
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('response_work_item.json'));
       // Act
       final result = tWorkItemModel.toJson();
       // Assert

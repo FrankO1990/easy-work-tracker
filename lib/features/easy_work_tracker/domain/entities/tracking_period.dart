@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/work_item.dart';
 
 class TrackingPeriod extends Equatable {
+  final int id;
   final String title;
   final int usedHourlyRateInEuro;
   final List<WorkItem> trackedWorkItems;
@@ -19,10 +20,8 @@ class TrackingPeriod extends Equatable {
   }
 
   const TrackingPeriod(
-      {required this.title,
-      required this.usedHourlyRateInEuro,
-      required this.trackedWorkItems});
+      {required this.id, required this.title, required this.usedHourlyRateInEuro, required this.trackedWorkItems});
 
   @override
-  List<Object?> get props => [title, usedHourlyRateInEuro, trackedWorkItems];
+  List<Object?> get props => [id, title, usedHourlyRateInEuro, trackedWorkItems];
 }

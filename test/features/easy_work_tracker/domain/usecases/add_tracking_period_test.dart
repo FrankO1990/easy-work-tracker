@@ -20,11 +20,10 @@ void main() {
     test('should forward the call to the dependent repository', () async {
       // Arrange
       when(mockEasyWorkTrackerRepository.addTrackingPeriod(any)).thenAnswer(
-          (realInvocation) async => Right(AllTrackingPeriods(
-              trackingPeriods: List<TrackingPeriod>.empty())));
+          (realInvocation) async => Right(AllTrackingPeriods(trackingPeriods: List<TrackingPeriod>.empty())));
 
-      const trackingPeriod = TrackingPeriod(
-          title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: []);
+      const trackingPeriod =
+          TrackingPeriod(id: 1, title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: []);
       // Act
       await usecase(const TrackingPeriodParams(trackingPeriod: trackingPeriod));
       // Assert

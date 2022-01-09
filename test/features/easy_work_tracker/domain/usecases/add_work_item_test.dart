@@ -13,11 +13,17 @@ void main() {
   late AddWorkItem usecase;
 
   const tWorkItem = WorkItem(
+      id: 1,
+      associatedTrackingPeriodId: 1,
       description: 'description',
       epicDescription: 'epicDescription',
       trackedHours: 123);
   const tTrackingPeriod = TrackingPeriod(
-      title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: [tWorkItem]);
+    id: 1,
+    title: 'title',
+    usedHourlyRateInEuro: 123,
+    trackedWorkItems: [tWorkItem],
+  );
 
   setUp(() {
     mockEasyWorkTrackerRepository = MockEasyWorkTrackerRepository();

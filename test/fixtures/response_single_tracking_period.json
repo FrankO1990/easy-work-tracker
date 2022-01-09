@@ -1,17 +1,24 @@
 {
+    "id" : 1,
     "title" : "test",
     "usedHourlyRateInEuro" : 123,
     "trackedWorkItems" : [{
-        "description" : "test 1",
-        "epicDescription": "test 1",
-        "trackedHours" : 123
+            "id" : 1,
+            "associatedTrackingPeriodId": 1,
+            "description" : "test 1",
+            "epicDescription": "test 1",
+            "trackedHours" : 123
         },
         {
+            "id" : 2,
+            "associatedTrackingPeriodId": 1,
             "description" : "test 2",
             "epicDescription": "test 2",
             "trackedHours" : 123
         },
         {
+            "id" : 3,
+            "associatedTrackingPeriodId": 1,
             "description" : "test 3",
             "epicDescription": "test 3",
             "trackedHours" : 123

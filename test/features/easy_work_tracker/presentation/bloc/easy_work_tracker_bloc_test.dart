@@ -36,8 +36,8 @@ void main() {
     ),
   );
 
-  final TrackingPeriod tTrackingPeriod =
-      TrackingPeriod(title: 'title', usedHourlyRateInEuro: tInputIntegerParsed, trackedWorkItems: const []);
+  final TrackingPeriod tTrackingPeriod = TrackingPeriod(
+      id: 1, title: 'title', usedHourlyRateInEuro: tInputIntegerParsed, trackedWorkItems: const []);
 
   setUp(() {
     mockInputConverter = MockInputConverter();
@@ -82,8 +82,8 @@ void main() {
       // Arrange
       setUpMockGetTrackingPeriodsCallSuccess();
       // Assert later
-      expectLater(
-          bloc.stream, emitsInOrder([Loading(), TrackingPeriodsLoaded(allTrackingPeriods: tAllTrackingPeriods)]));
+      expectLater(bloc.stream,
+          emitsInOrder([Loading(), TrackingPeriodsLoaded(allTrackingPeriods: tAllTrackingPeriods)]));
       // Act
       bloc.add(const GetTrackingPeriodsEvent());
       // Assert
@@ -104,7 +104,8 @@ void main() {
       when(mockAddTrackingPeriod(any)).thenAnswer((realInvocation) async => Right(tAllTrackingPeriods));
     }
 
-    test('should call the InputConverter to validate and convert the input to an unsigned integer for used hourly rate',
+    test(
+        'should call the InputConverter to validate and convert the input to an unsigned integer for used hourly rate',
         () async {
       // Arrange
       setUpMockInputConverterSuccess();
@@ -135,6 +136,7 @@ void main() {
       // Assert
       verify(mockAddTrackingPeriod(TrackingPeriodParams(
           trackingPeriod: TrackingPeriod(
+        id: 0,
         title: 'inputTitle',
         usedHourlyRateInEuro: tInputIntegerParsed,
         trackedWorkItems: const [],
@@ -146,8 +148,8 @@ void main() {
       setUpMockAddTrackingPeriodSuccess();
       setUpMockInputConverterSuccess();
       // assert later
-      expectLater(
-          bloc.stream, emitsInOrder([Loading(), TrackingPeriodsLoaded(allTrackingPeriods: tAllTrackingPeriods)]));
+      expectLater(bloc.stream,
+          emitsInOrder([Loading(), TrackingPeriodsLoaded(allTrackingPeriods: tAllTrackingPeriods)]));
       // Assert
       bloc.add(const AddTrackingPeriodEvent(inputTitle: 'inputTitle', inputUsedHourlyRate: tInputString));
     });

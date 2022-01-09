@@ -10,15 +10,28 @@ import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
   const tTrackingPeriodModel = TrackingPeriodModel(
+    id: 1,
     title: 'test',
     usedHourlyRateInEuro: 123,
     trackedWorkItemModels: [
       WorkItemModel(
-          description: 'test 1', epicDescription: 'test 1', trackedHours: 123),
+          id: 1,
+          associatedTrackingPeriodId: 1,
+          description: 'test 1',
+          epicDescription: 'test 1',
+          trackedHours: 123),
       WorkItemModel(
-          description: 'test 2', epicDescription: 'test 2', trackedHours: 123),
+          id: 2,
+          associatedTrackingPeriodId: 1,
+          description: 'test 2',
+          epicDescription: 'test 2',
+          trackedHours: 123),
       WorkItemModel(
-          description: 'test 3', epicDescription: 'test 3', trackedHours: 123)
+          id: 3,
+          associatedTrackingPeriodId: 1,
+          description: 'test 3',
+          epicDescription: 'test 3',
+          trackedHours: 123)
     ],
   );
 
@@ -34,8 +47,7 @@ void main() {
   group('[TrackingPeriodModel fromJson]', () {
     test('Should return a valid model from a json file input', () async {
       // Arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture('response_single_tracking_period.json'));
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('response_single_tracking_period.json'));
       // Act
       final result = TrackingPeriodModel.fromJson(jsonMap);
       // Assert
@@ -46,23 +58,27 @@ void main() {
   group('[TrackingPeriodModel from TrackingPeriod]', () {
     test('should return a valid model from TrackingPeriod input', () async {
       // Arrange
-      TrackingPeriod tTrackingPeriod = const TrackingPeriod(
-          title: 'test',
-          usedHourlyRateInEuro: 123,
-          trackedWorkItems: [
-            WorkItem(
-                description: 'test 1',
-                epicDescription: 'test 1',
-                trackedHours: 123),
-            WorkItem(
-                description: 'test 2',
-                epicDescription: 'test 2',
-                trackedHours: 123),
-            WorkItem(
-                description: 'test 3',
-                epicDescription: 'test 3',
-                trackedHours: 123)
-          ]);
+      TrackingPeriod tTrackingPeriod =
+          const TrackingPeriod(id: 1, title: 'test', usedHourlyRateInEuro: 123, trackedWorkItems: [
+        WorkItem(
+            id: 1,
+            associatedTrackingPeriodId: 1,
+            description: 'test 1',
+            epicDescription: 'test 1',
+            trackedHours: 123),
+        WorkItem(
+            id: 2,
+            associatedTrackingPeriodId: 1,
+            description: 'test 2',
+            epicDescription: 'test 2',
+            trackedHours: 123),
+        WorkItem(
+            id: 3,
+            associatedTrackingPeriodId: 1,
+            description: 'test 3',
+            epicDescription: 'test 3',
+            trackedHours: 123)
+      ]);
       // Act
       final result = TrackingPeriodModel.fromTrackingPeriod(tTrackingPeriod);
       // Assert
@@ -73,8 +89,7 @@ void main() {
   group('[TrackingPeriodModel toJson]', () {
     test('should return a matching json map', () async {
       // Arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture('response_single_tracking_period.json'));
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('response_single_tracking_period.json'));
       // Act
       final result = tTrackingPeriodModel.toJson();
       // Assert

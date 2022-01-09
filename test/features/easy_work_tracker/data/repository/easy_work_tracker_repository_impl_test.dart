@@ -24,31 +24,35 @@ void main() {
   late MockEasyWorkTrackerRemoteDataSource mockRemoteDataSource;
 
   AllTrackingPeriodsModel tAllTrackingPeriodsModel =
-      AllTrackingPeriodsModel.fromJson(
-          jsonDecode(fixture('response_get_tracking_periods.json')));
+      AllTrackingPeriodsModel.fromJson(jsonDecode(fixture('response_get_tracking_periods.json')));
 
-  TrackingPeriod tTrackingPeriod = const TrackingPeriod(
-      title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: []);
+  TrackingPeriod tTrackingPeriod =
+      const TrackingPeriod(id: 1, title: 'title', usedHourlyRateInEuro: 123, trackedWorkItems: []);
 
-  TrackingPeriodModel tTrackingPeriodModel = TrackingPeriodModel.fromJson(
-      jsonDecode(fixture('response_single_tracking_period.json')));
+  TrackingPeriodModel tTrackingPeriodModel =
+      TrackingPeriodModel.fromJson(jsonDecode(fixture('response_single_tracking_period.json')));
+
+  const WorkItem tWorkItem = WorkItem(
+      id: 1,
+      associatedTrackingPeriodId: 1,
+      description: 'description',
+      epicDescription: 'epicDescription',
+      trackedHours: 123);
 
   setUp(() {
     mockNetworkInfo = MockNetworkInfo();
     mockRemoteDataSource = MockEasyWorkTrackerRemoteDataSource();
-    repository = EasyWorkTrackerRepositoryImpl(
-        remoteDataSource: mockRemoteDataSource, networkInfo: mockNetworkInfo);
+    repository =
+        EasyWorkTrackerRepositoryImpl(remoteDataSource: mockRemoteDataSource, networkInfo: mockNetworkInfo);
   });
 
   void stubNetworkInfoOnline() {
     setUp(() {
-      when(mockNetworkInfo.isConnected)
-          .thenAnswer((realInvocation) async => true);
+      when(mockNetworkInfo.isConnected).thenAnswer((realInvocation) async => true);
     });
   }
 
-  group('[EasyWorkTrackerRepositoryImpl-getTrackingPeriods-connection check]',
-      () {
+  group('[EasyWorkTrackerRepositoryImpl-getTrackingPeriods-connection check]', () {
     stubNetworkInfoOnline();
     test('should check if the device is online', () async {
       // Arrange
@@ -63,12 +67,9 @@ void main() {
     });
   });
 
-  group('[EasyWorkTrackerRepositoryImpl - getTrackingPeriods - device online]',
-      () {
+  group('[EasyWorkTrackerRepositoryImpl - getTrackingPeriods - device online]', () {
     stubNetworkInfoOnline();
-    test(
-        'should return remote data when the call to the remote data source is successful',
-        () async {
+    test('should return remote data when the call to the remote data source is successful', () async {
       // Arrange
 
       when(mockRemoteDataSource.getTrackingPeriods())
@@ -80,12 +81,9 @@ void main() {
       expect(result, Right(tAllTrackingPeriodsModel));
     });
 
-    test(
-        'should return a ServerFailure when the response from the API is not successful',
-        () async {
+    test('should return a ServerFailure when the response from the API is not successful', () async {
       // Arrange
-      when(mockRemoteDataSource.getTrackingPeriods())
-          .thenThrow(ServerException());
+      when(mockRemoteDataSource.getTrackingPeriods()).thenThrow(ServerException());
       // Act
       final result = await repository.getTrackingPeriods();
       // Assert
@@ -95,11 +93,9 @@ void main() {
   });
 
   group('[EasyWorkTrackerImpl - getTrackingPeriods - Device is offline]', () {
-    test('should return a DeviceOfflineFailure when the device is offline',
-        () async {
+    test('should return a DeviceOfflineFailure when the device is offline', () async {
       // Arrange
-      when(mockNetworkInfo.isConnected)
-          .thenAnswer((realInvocation) async => false);
+      when(mockNetworkInfo.isConnected).thenAnswer((realInvocation) async => false);
       // Act
       final result = await repository.getTrackingPeriods();
       // Assert
@@ -113,11 +109,9 @@ void main() {
 
     test('should check if the device is connected to the internet', () async {
       // Arrange
-      when(mockRemoteDataSource.addWorkItem(any))
-          .thenAnswer((realInvocation) async => tTrackingPeriodModel);
+      when(mockRemoteDataSource.addWorkItem(any)).thenAnswer((realInvocation) async => tTrackingPeriodModel);
       // Act
-      await repository.addWorkItem(const WorkItem(
-          description: 'test', epicDescription: 'test', trackedHours: 123));
+      await repository.addWorkItem(tWorkItem);
       // Assert
       verify(mockNetworkInfo.isConnected);
     });
@@ -127,12 +121,8 @@ void main() {
     stubNetworkInfoOnline();
     test('should return remote data when the call is successful', () async {
       // Arrange
-      when(mockRemoteDataSource.addWorkItem(any))
-          .thenAnswer((realInvocation) async => tTrackingPeriodModel);
-      const workItem = WorkItem(
-          description: 'description',
-          epicDescription: 'epicDescription',
-          trackedHours: 123);
+      when(mockRemoteDataSource.addWorkItem(any)).thenAnswer((realInvocation) async => tTrackingPeriodModel);
+      const workItem = tWorkItem;
       // Act
       final result = await repository.addWorkItem(workItem);
       // Assert
@@ -140,39 +130,29 @@ void main() {
       verify(mockRemoteDataSource.addWorkItem(workItem));
     });
 
-    test('should return ServerFailure when the call is not successful',
-        () async {
+    test('should return ServerFailure when the call is not successful', () async {
       // Arrange
       when(mockRemoteDataSource.addWorkItem(any)).thenThrow(ServerException());
       // Act
-      final result = await repository.addWorkItem(const WorkItem(
-          description: 'description',
-          epicDescription: 'epicDescription',
-          trackedHours: 123));
+      final result = await repository.addWorkItem(tWorkItem);
       // Assert
       expect(result, Left(ServerFailure()));
     });
   });
 
   group('[EasyWorkTrackerRepositoryImpl - addWorkItem - Offline Path]', () {
-    test('should return a DeviceOfflineFailure when the device is offline',
-        () async {
+    test('should return a DeviceOfflineFailure when the device is offline', () async {
       // Arrange
-      when(mockNetworkInfo.isConnected)
-          .thenAnswer((realInvocation) async => false);
+      when(mockNetworkInfo.isConnected).thenAnswer((realInvocation) async => false);
       // Act
-      final result = await repository.addWorkItem(const WorkItem(
-          description: 'test',
-          epicDescription: 'epicDescription',
-          trackedHours: 123));
+      final result = await repository.addWorkItem(tWorkItem);
       // Assert
       expect(result, Left(DeviceOfflineFailure()));
       verifyZeroInteractions(mockRemoteDataSource);
     });
   });
 
-  group('[EasyWorkTrackerRepositoryImpl - addTrackingPeriod-connection check]',
-      () {
+  group('[EasyWorkTrackerRepositoryImpl - addTrackingPeriod-connection check]', () {
     stubNetworkInfoOnline();
     test('should check if the device is online', () async {
       // Arrange
@@ -198,11 +178,9 @@ void main() {
       verify(mockRemoteDataSource.addTrackingPeriod(tTrackingPeriod));
     });
 
-    test('should return ServerFailure when the call is not successful',
-        () async {
+    test('should return ServerFailure when the call is not successful', () async {
       // Arrange
-      when(mockRemoteDataSource.addTrackingPeriod(any))
-          .thenThrow(ServerException());
+      when(mockRemoteDataSource.addTrackingPeriod(any)).thenThrow(ServerException());
       // Act
       final result = await repository.addTrackingPeriod(tTrackingPeriod);
       // Assert
@@ -211,11 +189,9 @@ void main() {
   });
 
   group('[EasyWorkTrackerRepositoryImpl-addTrackingPeriod-Offline Path]', () {
-    test('should return DeviceOfflineFailure when the device is offline',
-        () async {
+    test('should return DeviceOfflineFailure when the device is offline', () async {
       // Arrange
-      when(mockNetworkInfo.isConnected)
-          .thenAnswer((realInvocation) async => false);
+      when(mockNetworkInfo.isConnected).thenAnswer((realInvocation) async => false);
       // Act
       final result = await repository.addTrackingPeriod(tTrackingPeriod);
       // Assert

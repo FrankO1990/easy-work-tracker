@@ -8,45 +8,66 @@ void main() {
 
   setUp(() {
     trackingPeriod90EurosTest1 = const TrackingPeriod(
+      id: 1,
       title: 'test 1',
       usedHourlyRateInEuro: 90,
       trackedWorkItems: [
         WorkItem(
-            description: 'test', epicDescription: 'test epic', trackedHours: 4),
+          id: 1,
+          associatedTrackingPeriodId: 1,
+          description: 'test',
+          epicDescription: 'test epic',
+          trackedHours: 4,
+        ),
         WorkItem(
-            description: 'description',
-            epicDescription: 'epicDescription',
-            trackedHours: 7),
+          id: 2,
+          associatedTrackingPeriodId: 1,
+          description: 'description',
+          epicDescription: 'epicDescription',
+          trackedHours: 7,
+        ),
         WorkItem(
-            description: 'description',
-            epicDescription: 'epicDescription',
-            trackedHours: 74)
+          id: 3,
+          associatedTrackingPeriodId: 1,
+          description: 'description',
+          epicDescription: 'epicDescription',
+          trackedHours: 74,
+        )
       ],
     );
 
     trackingPeriod111EurosTest2 = const TrackingPeriod(
+      id: 2,
       title: 'test 2',
       usedHourlyRateInEuro: 111,
       trackedWorkItems: [
         WorkItem(
-            description: 'test',
-            epicDescription: 'test epic',
-            trackedHours: 124),
+          id: 4,
+          associatedTrackingPeriodId: 2,
+          description: 'test',
+          epicDescription: 'test epic',
+          trackedHours: 124,
+        ),
         WorkItem(
-            description: 'description',
-            epicDescription: 'epicDescription',
-            trackedHours: 67),
+          id: 5,
+          associatedTrackingPeriodId: 2,
+          description: 'description',
+          epicDescription: 'epicDescription',
+          trackedHours: 67,
+        ),
         WorkItem(
-            description: 'description',
-            epicDescription: 'epicDescription',
-            trackedHours: 13)
+          id: 6,
+          associatedTrackingPeriodId: 2,
+          description: 'description',
+          epicDescription: 'epicDescription',
+          trackedHours: 13,
+        )
       ],
     );
   });
 
   group('[TrackingPeriod]', () {
-    test(
-        'should add up all tracked items of test track period 1 and return correct sum of tracked hours',
+    test('should add up all tracked items of test track period 1 and return correct sum of tracked hours',
         () async {
       // Arrange
 
@@ -56,8 +77,7 @@ void main() {
       expect(result, 85);
     });
 
-    test('should multiply the total tracked hours with the hourly rate',
-        () async {
+    test('should multiply the total tracked hours with the hourly rate', () async {
       // Arrange
       // Act
       int result = trackingPeriod90EurosTest1.totalInvoiceAmount;
@@ -65,8 +85,7 @@ void main() {
       expect(result, 7650);
     });
 
-    test(
-        'should add up all tracked items of test track period 2 and return correct sum of tracked hours',
+    test('should add up all tracked items of test track period 2 and return correct sum of tracked hours',
         () async {
       // Arrange
       // Act
@@ -75,9 +94,7 @@ void main() {
       expect(result, 204);
     });
 
-    test(
-        'should multipy the hourly rate and the total tracked hours of test period 2',
-        () async {
+    test('should multipy the hourly rate and the total tracked hours of test period 2', () async {
       // Arrange
       // Act
       int result = trackingPeriod111EurosTest2.totalInvoiceAmount;

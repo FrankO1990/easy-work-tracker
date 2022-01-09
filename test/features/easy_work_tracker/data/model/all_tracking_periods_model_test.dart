@@ -9,38 +9,31 @@ import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/a
 import '../../../../fixtures/fixture_reader.dart';
 
 void main() {
-  AllTrackingPeriodsModel tAllTrackingPeriodsModel =
-      const AllTrackingPeriodsModel(trackingPeriodModels: [
+  AllTrackingPeriodsModel tAllTrackingPeriodsModel = const AllTrackingPeriodsModel(trackingPeriodModels: [
     TrackingPeriodModel(
+      id: 1,
       title: 'test 1',
       usedHourlyRateInEuro: 123,
       trackedWorkItemModels: [
         WorkItemModel(
-            description: 'test 1',
-            epicDescription: 'test 1',
-            trackedHours: 123),
+            id: 1, associatedTrackingPeriodId: 1, description: 'test 1', epicDescription: 'test 1', trackedHours: 123),
         WorkItemModel(
-            description: 'test 2',
-            epicDescription: 'test 2',
-            trackedHours: 123),
+            id: 2, associatedTrackingPeriodId: 1, description: 'test 2', epicDescription: 'test 2', trackedHours: 123),
         WorkItemModel(
-            description: 'test 3', epicDescription: 'test 3', trackedHours: 123)
+            id: 3, associatedTrackingPeriodId: 1, description: 'test 3', epicDescription: 'test 3', trackedHours: 123)
       ],
     ),
     TrackingPeriodModel(
+      id: 2,
       title: 'test 2',
       usedHourlyRateInEuro: 123,
       trackedWorkItemModels: [
         WorkItemModel(
-            description: 'test 1',
-            epicDescription: 'test 1',
-            trackedHours: 123),
+            id: 4, associatedTrackingPeriodId: 2, description: 'test 1', epicDescription: 'test 1', trackedHours: 123),
         WorkItemModel(
-            description: 'test 2',
-            epicDescription: 'test 2',
-            trackedHours: 123),
+            id: 5, associatedTrackingPeriodId: 2, description: 'test 2', epicDescription: 'test 2', trackedHours: 123),
         WorkItemModel(
-            description: 'test 3', epicDescription: 'test 3', trackedHours: 123)
+            id: 6, associatedTrackingPeriodId: 2, description: 'test 3', epicDescription: 'test 3', trackedHours: 123)
       ],
     )
   ]);
@@ -55,11 +48,9 @@ void main() {
   });
 
   group('[AllTrackingPeriodsModel fromJson]', () {
-    test('should return a valid AllTrackingPeriodsModel from a json map input',
-        () async {
+    test('should return a valid AllTrackingPeriodsModel from a json map input', () async {
       // Arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture('response_get_tracking_periods.json'));
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('response_get_tracking_periods.json'));
       // Act
       final result = AllTrackingPeriodsModel.fromJson(jsonMap);
       // Assert
@@ -70,8 +61,7 @@ void main() {
   group('[AllTrackingPeriodsModel toJson]', () {
     test('should return a matching json map', () async {
       // Arrange
-      final Map<String, dynamic> jsonMap =
-          jsonDecode(fixture('response_get_tracking_periods.json'));
+      final Map<String, dynamic> jsonMap = jsonDecode(fixture('response_get_tracking_periods.json'));
       // Act
       final result = tAllTrackingPeriodsModel.toJson();
       // Assert
