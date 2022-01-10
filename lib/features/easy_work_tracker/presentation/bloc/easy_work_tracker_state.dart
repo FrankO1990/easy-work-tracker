@@ -23,5 +23,14 @@ class TrackingPeriodsLoaded extends EasyWorkTrackerState {
   const TrackingPeriodsLoaded({required this.allTrackingPeriods});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [allTrackingPeriods];
+}
+
+class WorkItemAdded extends EasyWorkTrackerState {
+  final TrackingPeriod trackingPeriod;
+
+  const WorkItemAdded({required this.trackingPeriod});
+
+  @override
+  List<Object> get props => [trackingPeriod];
 }

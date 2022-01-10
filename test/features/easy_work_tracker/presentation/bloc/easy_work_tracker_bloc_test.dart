@@ -9,6 +9,7 @@ import 'package:franks_invoice_tool/core/util/input_converter.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/data/models/all_tracking_periods_model.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/all_tracking_periods.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/tracking_period.dart';
+import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/work_item.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/usecases/add_tracking_period.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/usecases/add_work_item.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/usecases/get_tracking_periods.dart';
@@ -162,6 +163,82 @@ void main() {
       expectLater(bloc.stream, emitsInOrder([Loading(), const Error(message: SERVER_FAILURE_MESSAGE)]));
       // Assert
       bloc.add(const AddTrackingPeriodEvent(inputTitle: 'inputTitle', inputUsedHourlyRate: tInputString));
+    });
+  });
+
+  group('[AddWorkItemEvent]', () {
+    final WorkItem tWorkItem = WorkItem(
+        id: 0,
+        associatedTrackingPeriodId: 1,
+        description: 'description',
+        epicDescription: 'epicDescription',
+        trackedHours: tInputIntegerParsed);
+
+    final AddWorkItemEvent tAddWorkItemEvent = AddWorkItemEvent(
+      associatedTrackingPeriodId: tWorkItem.associatedTrackingPeriodId,
+      inputDescription: tWorkItem.description,
+      inputEpicDescription: tWorkItem.epicDescription,
+      inputTrackedHours: tInputString,
+    );
+
+    void setUpMockAddWorkItemSuccess() {
+      when(mockAddWorkItem(any)).thenAnswer((realInvocation) async => Right(tTrackingPeriod));
+    }
+
+    test(
+        'should call InputConverter to validate and convert String Input for associatedTrackingPeriodId and trackedHours',
+        () async {
+      // Arrange
+      setUpMockInputConverterSuccess();
+      setUpMockAddWorkItemSuccess();
+      // Act
+      bloc.add(tAddWorkItemEvent);
+
+      await untilCalled(mockInputConverter.convertStringToUnsignedInt(any));
+      // Assert
+      verify(mockInputConverter.convertStringToUnsignedInt(tInputString));
+    });
+
+    test('should emit [Error] when the input is not a valid number', () async {
+      // Arrange
+      when(mockInputConverter.convertStringToUnsignedInt(any)).thenReturn(Left(InvalidInputFailure()));
+      setUpMockAddWorkItemSuccess();
+      //Assert later
+      expectLater(bloc.stream, emitsInOrder([const Error(message: INVALID_INPUT_FAILURE_MESSAGE)]));
+      // Act
+      bloc.add(tAddWorkItemEvent);
+      // Assert
+    });
+
+    test('should get data from the AddWorkItem usecase', () async {
+      // Arrange
+      setUpMockInputConverterSuccess();
+      setUpMockAddWorkItemSuccess();
+      // Act
+      bloc.add(tAddWorkItemEvent);
+      await untilCalled(mockAddWorkItem(any));
+      // Assert
+      verify(mockAddWorkItem(Params(workItem: tWorkItem)));
+    });
+
+    test('should emit [Loading, Error] when the usecase returns Failure', () async {
+      // Arrange
+      setUpMockInputConverterSuccess();
+      when(mockAddWorkItem(any)).thenAnswer((realInvocation) async => Left(ServerFailure()));
+      // Assert later
+      expectLater(bloc.stream, emitsInOrder([Loading(), const Error(message: SERVER_FAILURE_MESSAGE)]));
+      //Act
+      bloc.add(tAddWorkItemEvent);
+    });
+
+    test('should emit [Loading, WorkItemAdded] when the usecase returns Data', () async {
+      // Arrange
+      setUpMockAddWorkItemSuccess();
+      setUpMockInputConverterSuccess();
+      // Assert later
+      expectLater(bloc.stream, emitsInOrder([Loading(), WorkItemAdded(trackingPeriod: tTrackingPeriod)]));
+      // Act
+      bloc.add(tAddWorkItemEvent);
     });
   });
 }

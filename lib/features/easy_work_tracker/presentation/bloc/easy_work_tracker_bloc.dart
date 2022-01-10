@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:franks_invoice_tool/core/constants/constants.dart';
-import 'package:franks_invoice_tool/core/errors/failure.dart';
 import 'package:franks_invoice_tool/core/usecases/usecase.dart';
 import 'package:franks_invoice_tool/core/util/input_converter.dart';
 import 'package:franks_invoice_tool/features/easy_work_tracker/domain/entities/all_tracking_periods.dart';
@@ -41,26 +40,54 @@ class EasyWorkTrackerBloc extends Bloc<EasyWorkTrackerEvent, EasyWorkTrackerStat
     });
     on<AddTrackingPeriodEvent>((event, emit) async {
       final parsedResult = inputConverter.convertStringToUnsignedInt(event.inputUsedHourlyRate);
-      await parsedResult.fold((failure) {
-        emit(const Error(message: INVALID_INPUT_FAILURE_MESSAGE));
-      }, (parsedInteger) async {
-        emit(Loading());
-        final result = await addTrackingPeriod(
-          TrackingPeriodParams(
-            trackingPeriod: TrackingPeriod(
-              id: 0,
-              title: event.inputTitle,
-              usedHourlyRateInEuro: parsedInteger,
-              trackedWorkItems: const [],
+      await parsedResult.fold(
+        (failure) {
+          emit(const Error(message: INVALID_INPUT_FAILURE_MESSAGE));
+        },
+        (parsedInteger) async {
+          emit(Loading());
+          final result = await addTrackingPeriod(
+            TrackingPeriodParams(
+              trackingPeriod: TrackingPeriod(
+                id: 0,
+                title: event.inputTitle,
+                usedHourlyRateInEuro: parsedInteger,
+                trackedWorkItems: const [],
+              ),
             ),
-          ),
-        );
-        result.fold((failure) {
-          emit(const Error(message: SERVER_FAILURE_MESSAGE));
-        }, (allTrackingPeriods) {
-          emit(TrackingPeriodsLoaded(allTrackingPeriods: allTrackingPeriods));
-        });
-      });
+          );
+          result.fold(
+            (failure) {
+              emit(const Error(message: SERVER_FAILURE_MESSAGE));
+            },
+            (allTrackingPeriods) {
+              emit(TrackingPeriodsLoaded(allTrackingPeriods: allTrackingPeriods));
+            },
+          );
+        },
+      );
+    });
+    on<AddWorkItemEvent>((event, emit) async {
+      final parsedInputResult = inputConverter.convertStringToUnsignedInt(event.inputTrackedHours);
+
+      await parsedInputResult.fold(
+        (l) async => emit(const Error(message: INVALID_INPUT_FAILURE_MESSAGE)),
+        (r) async {
+          emit(Loading());
+          final result = await addWorkItem(Params(
+              workItem: WorkItem(
+            id: 0,
+            associatedTrackingPeriodId: event.associatedTrackingPeriodId,
+            description: event.inputDescription,
+            epicDescription: event.inputEpicDescription,
+            trackedHours: r,
+          )));
+          result.fold(
+            (l) => emit(const Error(message: SERVER_FAILURE_MESSAGE)),
+            (r) => emit(WorkItemAdded(trackingPeriod: r)),
+          );
+        },
+      );
     });
   }
 }
